@@ -1,0 +1,16 @@
+{
+    "allDays": {
+        "2019-01-01" :  {
+            "isWorkDay": true,
+            "isHoliday": true
+        },
+        "2019-01-02" :  {
+            "isWorkDay": true,
+            "isHoliday": false
+        },
+        "2019-01-03" :  {
+            "isWorkDay": true,
+            "isHoliday": false
+        }
+    }
+}
