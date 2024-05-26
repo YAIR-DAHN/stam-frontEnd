@@ -4,42 +4,69 @@
         <h1>חישובים שמורים</h1>
         <hr>
 
+        <!-- <div>
+                            <ShowChart />
+                        </div> -->
 
         <div class="grid-card">
             <!-- <div v-for="calculation in calculations" :key="calculation.id"
                 :class="{ 'calculation-card': true, 'green-card': isZeroOrLess(calculation) }"> -->
             <div v-for="calculation in calculations" :key="calculation.id"
                 :class="{ 'calculation-card': true, 'green-card': isZeroOrLess(calculation), 'expanded-card': calculation.isExpanded }">
-                <div class="calculation-header">
-                    <h2>{{ calculation.bookType }}</h2>
-                    <p>תאריך ההגשה המשוער: <b>{{ calculation.estimatedTime }}</b></p>
-                    <p> הרווח המשוער הוא: <b>{{ calculation.profitPerPage }}</b></p>
-                    <p>כמות הספרים: <b>{{ calculation.booksAmount }}</b> עמודים לספר: <b>{{
+                <h2>{{ calculation.bookType }}</h2>
+                <div class="progress-bar">
+                    <progress :value="calculation.pagesWritten"
+                        :max="calculation.booksAmount * calculation.pagesPerBook"></progress>
+                    <span class="progress-text">{{ calculation.pagesWritten }} / {{ calculation.booksAmount *
+                calculation.pagesPerBook }}</span>
+                </div>
+                <div class="calculation-info">
+
+                    <div class="calculation-header">
+
+                        <p>תאריך ההגשה המשוער: <b>{{ calculation.estimatedTime }}</b></p>
+                        <p> הרווח המשוער הוא: <b>{{ calculation.profitPerPage }}</b></p>
+                        <p>כמות הספרים: <b>{{ calculation.booksAmount }}</b> עמודים לספר: <b>{{
                 calculation.pagesPerBook }}</b></p>
-                    <p>סך העמודים: <b>{{ (calculation.pagesPerBook * calculation.booksAmount) }}</b>
-                        נותרו: <b>{{ (calculation.pagesWritten ? ((calculation.pagesPerBook * calculation.booksAmount) -
+                        <p>סך העמודים: <b>{{ (calculation.pagesPerBook * calculation.booksAmount) }}</b>
+                            נותרו: <b>{{ (calculation.pagesWritten ? ((calculation.pagesPerBook *
+                calculation.booksAmount) -
                 calculation.pagesWritten) : "לא עודכן") }}</b></p>
-                    <p>לפי קצב של <b>{{ calculation.writingRate }}</b> עמודים לשעה</p>
-                    <!-- <p>Working Days per Week: {{ calculation.workingDaysPerWeek }}</p> -->
-                    <p><b>סה"כ ימים שנותרו: {{ daysLeft(calculation.estimatedTime) }}</b></p>
-                    <p><b>אתה צריך לכתוב {{
+                        <p>לפי קצב של <b>{{ calculation.writingRate }}</b> עמודים לשעה</p>
+                        <!-- <p>Working Days per Week: {{ calculation.workingDaysPerWeek }}</p> -->
+                        <p><b>סה"כ ימים שנותרו: {{ daysLeft(calculation.estimatedTime) }}</b></p>
+                        <p><b>אתה צריך לכתוב {{
                 ((calculation.booksAmount * calculation.pagesPerBook) /
                     daysLeft(calculation.estimatedTime)).toFixed(2)
             }} עמודים ליום</b></p>
+                    </div>
+
+                    <!-- הרחבת כרטיס -->
+                    <div v-show="calculation.isExpanded" class="expanded-card">
+
+                        <p>תאריך יצירה: <b>{{ calculation.createdAt }}</b></p>
+                        <p>תאריך ההגשה המשוער: <b>{{ calculation.estimatedTime }}</b></p>
+                        <p>ימי עבודה בשבוע: <br>
+                            <b>{{ translateDaysToHebrew(calculation.workdaysPerWeek) }}</b>
+                        </p>
+                       
+                    </div>
+                   
                 </div>
+
                 <div class="calculation-details">
                     <!-- <div v-if="calculation.showDetails" class="calculation-details"> -->
                     <input type="number" v-model="calculation.pagesWrittenToday" placeholder="כמה עמודים כתבת היום?" />
                     <button @click="updatePagesWritten(calculation)">עדכן</button>
                 </div>
-                <button @click="toggleDetails(calculation)">הצג פרטים נוספים</button>
+                 <div v-if="calculation.isExpanded">
+                            <ShowChart :userInfo="{id:calculation.id}" />
+                        </div>
+                <button v-show="!calculation.isExpanded" @click="toggleDetails(calculation)">הצג פרטים נוספים</button>
+                <button v-show="calculation.isExpanded" @click="toggleDetails(calculation)">הסתר פרטים נוספים</button>
 
 
-                <!-- הרחבת כרטיס -->
-                <div v-show="calculation.isExpanded" class="expanded-card">
-                כרטיס מורחבבב
-                <h2>{{ calculation.bookType }}</h2>
-                </div>
+
             </div>
         </div>
     </div>
@@ -49,8 +76,12 @@
 <script>
 import apiService from '../services/api-service.js'; // ייבוא של שירות ה-API
 import Alert from '../services/sweetAlert-service.js'; // ייבוא של שירות ה-Alert
-
+import ShowChart from './ShowChart.vue'
 export default {
+    name: "showCalc",
+    components: {
+        ShowChart: ShowChart
+    },
     data() {
         return {
             calculations: [],
@@ -132,6 +163,21 @@ export default {
             calculation.showDetails = !calculation.showDetails;
         },
 
+        // תרגום ימי השבוע לעברית
+        translateDaysToHebrew(days) {
+            const dayNamesMap = {
+                sunday: 'ראשון',
+                monday: 'שני',
+                tuesday: 'שלישי',
+                wednesday: 'רביעי',
+                thursday: 'חמישי',
+                friday: 'שישי',
+                saturday: 'שבת',
+            };
+
+            return days.split(',').map(day => dayNamesMap[day]).join(', ');
+        }
+
 
     },
 };
@@ -139,11 +185,12 @@ export default {
 
 <style scoped>
 .showCalcContiner {
-   position: relative;
+    position: relative;
     text-align: center;
     margin-bottom: 20px;
     margin-top: 20px;
 }
+
 /* עיצוב רשימת כרטיסיות */
 .grid-card {
     display: grid;
@@ -197,18 +244,17 @@ export default {
     cursor: pointer;
 }
 
+.calculation-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-content: space-evenly;
+    align-items: stretch;
+}
+
 /* עיצוב כרטיס מורחב */
 .expanded-card {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    grid-column: span 2;
 }
 
 /* .expanded-card {
@@ -220,5 +266,27 @@ export default {
     /* display: flex;
     justify-content: center;
     align-items: center; */
- 
+
+/* עיצוב פס התקדמות */
+.progress-bar {
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.progress-bar progress {
+    width: 100%;
+    height: 60px;
+
+}
+
+.progress-bar .progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 60px;
+    color: #4a4343;
+}
 </style>

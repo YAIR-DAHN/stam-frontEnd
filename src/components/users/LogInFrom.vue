@@ -56,7 +56,7 @@ export default {
           }, 2000)
         }
       } catch (error) {
-        console.error('Error:', error)
+        // console.error('Error:', error)
 
         if (error.response.status === 401) {
           Alert.error('שם משתמש או סיסמה שגויים')

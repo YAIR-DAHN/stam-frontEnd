@@ -1,44 +1,83 @@
 <template>
-      <div class="showProfileTitle">
+    <div class="showProfileTitle">
         <h1>הפרופיל שלי</h1>
+        <!-- <progressBar></progressBar> -->
         <hr>
-    <div>
-        <p>שם משתמש: {{ firstName }} {{ lastName }}</p>
-        <p>מספר טלפון: {{ phoneNumber }}</p>
-        <p>אימייל: {{ email }}</p>
-        <button @click="changePassword = !changePassword">שינוי סיסמה</button>
-        <button @click="logOut"> התנתקות</button>
+        <div>
+            <div v-if="!editOn"> שם משתמש: {{ firstName }} {{ lastName }}
+                <!-- <img src="../../assets/icons/edit_icon.svg" alt="edit" width="30" height="30" @click="editInfo"> -->
+            </div>
+            <div v-if="editOn" class="editInput">
+                שם :
+                <input type="text" v-model="firstName" placeholder="הכנס שם משתמש" />
+            </div>
+        <div>
+            <div v-if="!editOn"> מספר טלפון: {{ phoneNumber }}
+            </div>
+            <div v-if="editOn" class="editInput">
+                טלפון:
+                <input type="tel" v-model="phoneNumber" placeholder="הכנס מספר טלפון" />
+            </div>
+            <div v-if="!editOn"> אמייל: {{ email }}
+            </div>
+            <div v-if="editOn" class="editInput">
+                אמייל:
+                <input type="mail" v-model="email" placeholder="הכנס כתובת מייל" />
+            </div>
+            <div>
+                תאריך הרשמה: {{ createdAt }}
+            </div>
+            <hr>
 
-        <div v-if="changePassword">
-            <div >
-                <input  type="password" v-model="newPassword" placeholder="סיסמה חדשה" />
-                <br>
-                <br>
-                <input type="password" v-model="confirmPassword" placeholder="אימות סיסמה" />
-                <br> 
-                <button @click="changePassword = !changePassword">ביטול</button>
-                <button @click="changePasswordFunc">שנה סיסמה</button>
-                <br>
+            <button v-if="!editOn" @click="editInfo">עריכת פרטים </button>
+            <button v-if="editOn" @click="editInfo">ביטול עריכה</button>
+            <button v-if="editOn" @click="saveChanges">שמור שינויים</button>
+            <button v-if="!changePassword && !editOn" @click="changePassword = !changePassword">שינוי סיסמה</button>
+            <button v-if="!changePassword && !editOn" @click="logOut"> התנתקות</button>
+
+            <div v-if="changePassword">
+                <div>
+                    <input type="password" v-model="newPassword" placeholder="סיסמה חדשה" />
+
+                    <br>
+                    <br>
+                    <input type="password" v-model="confirmPassword" placeholder="אימות סיסמה" />
+                    <br>
+                    <button @click="changePassword = !changePassword">ביטול</button>
+                    <button @click="changePasswordFunc">שנה סיסמה</button>
+                    <br>
                 </div>
             </div>
+
+            </div>
+
+        </div>
     </div>
-</div>
-  </template>
+</template>
 
 <script>
 
 import apiService from '../services/api-service.js'; // ייבוא של שירות ה-API
 import Alert from '../services/sweetAlert-service.js'; // ייבוא של שירות ה-Alert
+// import Vue from 'vue'
+// import progressBar from '../ui/progressBar.vue';
 export default {
+//        components: {
+//             progressBar: progressBar,
+//   },
     data() {
+  
         return {
+          
             firstName: '',
             lastName: '',
             phoneNumber: '',
             email: '',
+            createdAt: '',
             changePassword: false,
             newPassword: '',
             confirmPassword: '',
+            editOn: false,
         };
     },
     mounted() {
@@ -49,6 +88,7 @@ export default {
                 this.lastName = response.data.userLastName;
                 this.phoneNumber = response.data.userPhone;
                 this.email = response.data.userEmail;
+                this.createdAt = response.data.createdAt;
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -56,6 +96,33 @@ export default {
             });
     },
     methods: {
+        // עריכת פרטים
+        editInfo() {
+            this.editOn = !this.editOn;
+        },
+        async saveChanges() {
+            const credentials = {
+                userFirstName: this.firstName,
+                userPhone: this.phoneNumber,
+                userEmail: this.email,
+            };
+            try {
+                const response = await apiService.putData('users/', credentials);
+                if (response.status !== 200) {
+                    Alert.error('שגיאה בשמירת השינויים', 'נסה שוב מאוחר יותר');
+                    return;
+                }
+                Alert.success('השינויים נשמרו בהצלחה');
+                this.editOn = false;
+            } catch (error) {
+                console.error('Error:', error);
+                Alert.error('שגיאה בשמירת השינויים', 'נסה שוב מאוחר יותר');
+            }
+        },
+
+
+
+        // שינוי סיסמה
         async changePasswordFunc() {
             if (this.newPassword !== this.confirmPassword) {
                 Alert.info('הסיסמאות לא תואמות');
@@ -81,6 +148,9 @@ export default {
                 Alert.error('שגיאה בשינוי הסיסמה', 'נסה שוב מאוחר יותר');
             }
         },
+        
+
+        // יציאה
         logOut() {
             localStorage.clear();
             Alert.info('התנתקת מהמערכת', 'הינך מועבר לדף התחברות');
@@ -94,11 +164,12 @@ export default {
 
 <style scoped>
 .showProfileTitle {
-   position: relative;
+    position: relative;
     text-align: center;
     margin-bottom: 20px;
     margin-top: 20px;
 }
+
 .profile {
     text-align: center;
     margin: 0 auto;
@@ -111,5 +182,10 @@ export default {
 
 .user-stats {
     margin-top: 20px;
+}
+
+.editInput{
+    margin-top: 10px;
+
 }
 </style>
