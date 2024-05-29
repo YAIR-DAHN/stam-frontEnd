@@ -29,7 +29,7 @@
             </div>
             <hr>
 
-            <button v-if="!editOn" @click="editInfo">עריכת פרטים </button>
+            <button v-if="!changePassword && !editOn" @click="editInfo">עריכת פרטים </button>
             <button v-if="editOn" @click="editInfo">ביטול עריכה</button>
             <button v-if="editOn" @click="saveChanges">שמור שינויים</button>
             <button v-if="!changePassword && !editOn" @click="changePassword = !changePassword">שינוי סיסמה</button>

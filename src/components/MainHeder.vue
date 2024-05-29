@@ -11,7 +11,7 @@
       <router-link to="/"><button class="nav-button">בית</button></router-link> 
       <router-link to="/startCalc"><button class="nav-button">מחשבון</button></router-link>
       <a href="https://angle-project.vercel.app/"><button class="nav-button"> מד זווית</button></a>
-      <router-link to="/login"><button class="nav-button"> כניסה</button></router-link> 
+      <router-link to="/login" v-if="!loggedIn"><button class="nav-button"> כניסה</button></router-link> 
       <router-link to="/Register"><button class="nav-button"> הרשמה</button></router-link>
       <router-link to="/showProfile"><button class="nav-button"> פרופיל</button></router-link>
       <router-link to="/ShowCalculations"><button class="nav-button"> ההמרות שלי</button></router-link>
@@ -26,7 +26,19 @@ export default {
   components: {
     todayHebrewDate: todayHebrewDate
   },
-};
+  data() {
+    return {
+      loggedIn: false
+    };
+  },
+  mounted() {
+    // check if user is logged in
+    // this.loggedIn = true;
+    if (localStorage.getItem("token")) {
+      this.loggedIn = true;
+    }
+    
+  }};
 </script>
   
 <style scoped>
@@ -57,7 +69,8 @@ img {
 }
 
 .nav-button:hover {
-  color: #ff0000;
+  /* color: #ff0000; */
+  color: #57a6f4;
   /* צבע כאשר מעבירים את העכבר מעל הכפתור */
 }
 </style>

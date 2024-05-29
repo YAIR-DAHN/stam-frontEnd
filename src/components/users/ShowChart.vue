@@ -1,6 +1,6 @@
 
 <template>
-       <div class="showCalcContiner">
+       <div class="showChartTitle">
         <h1>סטטיסטיקת עבודה</h1>
         <hr>
        </div>
@@ -121,7 +121,7 @@ this.data = Array.from(map.values());
   </script>
 
   <style scoped>
-  .showCalcContiner {
+  .showChartTitle {
     position: relative;
     text-align: center;
     margin-bottom: 20px;

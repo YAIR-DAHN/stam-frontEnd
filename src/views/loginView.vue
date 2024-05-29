@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LogInFrom from '@/components/users/LogInFrom.vue';
+import LogInFrom from '@/components/products/showProducts.vue';
 
 export default {
   name: 'LoginView',
@@ -15,3 +15,20 @@ export default {
   }
 }
 </script>
+<!-- <template>
+  <div class="login">
+    <LogInFrom/>
+  </div>
+</template>
+
+<script>
+import LogInFrom from '@/components/users/LogInFrom.vue';
+
+export default {
+  name: 'LoginView',
+  components: {
+    LogInFrom
+
+  }
+}
+</script> -->

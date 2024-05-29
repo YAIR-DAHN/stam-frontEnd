@@ -1,8 +1,8 @@
-<template>
+=<template>
 
   <!-- טעינת אייקונים -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
- 
+<!-- <ModalsContainer /> -->
 <div class="Continer">
     <div id="heder" class="row">
       <MainHeder />
@@ -32,12 +32,15 @@
 import MainHeder from "./components/MainHeder.vue";
 import rightAds from "./components/rightAds.vue";
 import leftAds from "./components/leftAds.vue";
+// import { ModalsContainer } from 'vue-final-modal'
+
 export default {
   name: "App",
   components: {
     MainHeder: MainHeder,
     rightAds: rightAds,
     leftAds: leftAds,
+    // ModalsContainer
   },
   methods: {
 
