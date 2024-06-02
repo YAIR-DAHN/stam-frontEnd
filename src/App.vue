@@ -1,9 +1,10 @@
 =<template>
 
   <!-- טעינת אייקונים -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<!-- <ModalsContainer /> -->
-<div class="Continer">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <!-- <ModalsContainer /> -->
+  <div class="Continer">
     <div id="heder" class="row">
       <MainHeder />
 
@@ -60,9 +61,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
   /* margin-top: 60px; */
   /* padding: 20px; */
 }
+
 /* .container {
   width: 100%; 
   margin-top: 60px;
@@ -72,6 +75,18 @@ export default {
   background-color: #f0f0f0;
   border-radius: 10px;
   box-shadow: 0 0 10px #000;
+  padding: 10px;
+}
+
+.Title {
+  position: relative;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.row {
+  --bs-gutter-x: 0;
 }
 
 @media (max-width: 1000px) {
@@ -82,13 +97,16 @@ export default {
   /* #app #heder {
      display: block; 
   } */
-  #app{
+  #app {
     padding: 10px;
   }
-  .Continer{
+
+  .Continer {
     padding: 15px;
   }
+
 }
+
 
 #app section {
   margin-top: 50px;

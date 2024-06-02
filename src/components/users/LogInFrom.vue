@@ -1,6 +1,9 @@
 <template>
+  <div class="Title">
+        <h1>כניסה לאתר</h1>
+        <hr>
+  </div>
   <div class="login-form">
-    <h2>כניסה לאתר</h2>
     <form @submit="submitForm">
       <div class="form-group">
         <label for="username">הזן מספר טלפון / כתובת מייל</label>

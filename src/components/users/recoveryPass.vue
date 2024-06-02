@@ -14,7 +14,8 @@
                 <option value="voice">שיחה קולית</option>
             </select>
         </div>
-        <button v-if="!verificationCodeSent" @click="sendVerificationCode" class="recovery-pass__button">שלח קוד אימות</button>
+        <button v-if="!verificationCodeSent" @click="sendVerificationCode" class="recovery-pass__button">שלח קוד
+            אימות</button>
         <div v-if="verificationCodeSent" class="recovery-pass__form-group">
             <label for="verificationCode" class="recovery-pass__label">קוד אימות:</label>
             <input type="text" id="verificationCode" v-model="verificationCode" class="recovery-pass__input" />
@@ -24,6 +25,7 @@
 </template>
 
 <script>
+
 import apiService from '../services/api-service.js'; // ייבוא של שירות ה-API
 import Alert from '../services/sweetAlert-service.js'; // ייבוא של שירות ה-Alert
 export default {
@@ -52,8 +54,33 @@ export default {
             }
             this.verificationCodeSent = true;
         },
-        verifyCode() {
+        async verifyCode() {
             // קוד לאימות הקוד שהוזן על ידי המשתמש
+            let credentials = {
+                code: this.verificationCode,
+            }
+            try {
+                await apiService.postData("users/recoveryPass/verify", credentials)
+                    .then(data => {
+                        if (data) {
+                            localStorage.setItem('token', data.data.userToken)
+                            localStorage.setItem('id', data.data.id)
+                            localStorage.setItem('first-name', data.data.userFirstName)
+                            localStorage.setItem('phone', data.data.userPhone)
+                            localStorage.setItem('email', data.data.userEmail)
+                            localStorage.setItem('role', data.data.userRole)
+                        }
+                    }
+
+                    )
+                Alert.success('הקוד אומת בהצלחה', 'הינך מועבר לפרופיל לצורך שינוי הסיסמה')
+                window.location.reload('/showProfile')
+                
+            } catch (error) {
+                console.error('Error:', error)
+                Alert.error('שגיאה באימות הקוד', 'נסה שוב מאוחר יותר')
+
+            }
         }
     }
 };

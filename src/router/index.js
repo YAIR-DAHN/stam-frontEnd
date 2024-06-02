@@ -7,6 +7,12 @@ import showProfile from '../views/ShowProfileView.vue'
 import startCalc from '../views/StartCalc.vue'
 import ShowCalculations from '../views/ShowCalculationsView.vue'
 import recoveryPass from '../views/RecoveryPassView.vue'
+import Products from '../views/productsView.vue'
+import AddProduct from '@/views/AddProductView.vue'
+import Contact from '../views/contactView.vue'
+import ShowUsers from '../views/ShowUsersView.vue'
+import Statistics from '../views/StatisticsView.vue'
+
 
 const routes = [
 
@@ -48,6 +54,33 @@ const routes = [
     name: 'ShowCalculations',
     component: ShowCalculations,
 },
+{
+    path: '/Products',
+    name: 'Products',
+    component: Products,
+},
+
+{
+    path: '/AddProduct',
+    name: 'AddProduct',
+    component: AddProduct,
+},
+{
+    path: '/Contact',
+    name: 'Contact',
+    component: Contact,
+},
+{
+    path: '/ShowUsers',
+    name: 'ShowUsers',
+    component: ShowUsers,
+},
+{
+    path: '/statistics',
+    name: 'statistics',
+    component: Statistics,
+}
+
 
  
 ]

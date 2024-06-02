@@ -1,6 +1,9 @@
 <template>
+   <div class="Title">
+        <h1>הרשמה</h1>
+        <hr>
+  </div>
   <div class="register-form">
-    <h2>הרשמה</h2>
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="firstName">שם משתמש:</label>

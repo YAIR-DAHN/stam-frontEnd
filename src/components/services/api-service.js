@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
     url: process.env.VUE_APP_URL_SERVER,
     token: localStorage.getItem('token'),
-    getData: function(path, param) {
+    getData: function(path, param = '') {
         try {
             return axios.get(`${this.url}/${path}${param}`, {
                 headers: {

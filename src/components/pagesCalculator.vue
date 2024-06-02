@@ -35,7 +35,7 @@
             <input type="number" id="Amount" v-model="userData.info.AmountSelct" min="1" />
           </div>
           <div class="col">
-            <label for="pages"> מספר עמודים (לספר 1) </label>
+            <label for="pages"> מספר עמודים (לספר) </label>
             <input type="number" id="pages" v-model="userData.info.pagesSelct" />
           </div>
         </div>
